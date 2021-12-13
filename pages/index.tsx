@@ -1,8 +1,22 @@
+import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import Head from 'next/head'
 import Image from 'next/image'
+import { useEffect } from 'react';
+import { auth } from '../lib/firebase';
 import styles from '../styles/Home.module.css'
+import Router from "next/router";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
+  useEffect(() => {
+    // Obtain emailLink from the user.
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+        signInWithEmailLink(auth, window.localStorage.getItem('emailForSignIn'), window.location.href)
+        .then(() => toast.success('Welcome to the magical hat!'))
+        .catch((error) =>  console.error(error))
+    }
+}, [])
+
   return (
     <div className={styles.container}>
       <Head>
@@ -12,6 +26,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <Toaster/>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
