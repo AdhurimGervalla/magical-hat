@@ -1,8 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithEmailLink } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
+import { FirebaseApp, initializeApp } from "firebase/app";
+import { getAuth, User } from "firebase/auth";
+import { doc, getDoc, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,8 +26,13 @@ export const actionCodeSettings = {
 };
 
 // Initialize Firebase
-initializeApp(firebaseConfig);
-export const auth = getAuth();
-export const firestore = getFirestore();
+const firebaseApp = initializeApp(firebaseConfig);
+export const auth = getAuth(firebaseApp);
+export const firestore = getFirestore(firebaseApp);
 
-export const googleAuthProvider = new GoogleAuthProvider();
+export const getUsernameWithUid = async (user: User) => {
+  const docRef = doc(firestore, 'users', user.uid);
+  const docSnap = await getDoc(docRef);
+  const data = docSnap.data();
+  return {...data};
+}
