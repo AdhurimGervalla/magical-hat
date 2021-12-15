@@ -1,10 +1,10 @@
 {
   "Welcome to React": "Welcome to React and react-i18next",
   "Login": "Login",
+  "Sign out": "Sign out",
   "Login with E-Mail link": "Login with E-Mail link",
   "Link has been sent to your e-mail address": "Link has been sent to your e-mail address",
   "E-Mail": "E-Mail",
   "Password": "Password",
-  "Sign out": "Sign out",
   "Hello": "Hello"
 }

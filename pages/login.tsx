@@ -24,7 +24,7 @@ export default function Login(): ReactElement {
             signOut(auth)
             .catch((error) => console.error(error));
         }
-        return <button onClick={logout}>Sign Out</button>;
+        return <button onClick={logout}>{i18n.t('Sign out')}</button>;
     }
 
     // Component that shows the Form to authenticate users
