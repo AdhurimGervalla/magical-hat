@@ -1,24 +1,15 @@
-import { ReactElement, useEffect, useState } from "react";
-import { actionCodeSettings, auth, firestore, getUsernameWithUid } from "../lib/firebase";
+import { ReactElement, useContext, useState } from "react";
+import { actionCodeSettings, auth } from "../lib/firebase";
 import { sendSignInLinkToEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import AuthCheck from "../components/AuthCheck";
-import { useAuthState } from "react-firebase-hooks/auth";
 import toast, { Toaster } from 'react-hot-toast';
-import { doc, getDoc } from "firebase/firestore";
+import { UserContext } from "../lib/context";
 
 export default function Login(): ReactElement {
-    const [user, loading] = useAuthState(auth);
-
-    function UserGreeting(): ReactElement {
-        const [username, setUsername] = useState(null);
-        useEffect(() => {
-            if (user) {
-                getUsernameWithUid(user).then((res) => {
-                    setUsername(res.username);
-                })
-            }
-        }, [user]);
+    const {user, username, loading} = useContext(UserContext);
     
+
+    function UserGreeting(): ReactElement {    
         return(
             <div>
                 {username && <p>Hi {username}</p>}
@@ -93,10 +84,8 @@ export default function Login(): ReactElement {
             <Toaster/>
             {!user && !loading && <SignInWithEmailForm />}
             <AuthCheck fallback={true}>
-                <>
                 <UserGreeting />
                 <LogoutButton />
-                </>
             </AuthCheck>
         </main>
     );

@@ -4,7 +4,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { auth, firestore } from "./firebase";
 
 export function useUserData() {
-    const [user] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const [username, setUsername] = useState(null);
 
     useEffect(() => {
@@ -21,5 +21,5 @@ export function useUserData() {
         return unsubscribe;
     }, [user]);
 
-    return {user, username};
+    return {user, username, loading};
 }
