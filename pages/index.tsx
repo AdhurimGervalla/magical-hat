@@ -1,16 +1,13 @@
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
-import Head from 'next/head'
-import Image from 'next/image'
 import { useContext, useEffect } from 'react';
+import i18n from '../i18n';
 import { auth } from '../lib/firebase';
-import styles from '../styles/Home.module.css'
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { UserContext } from '../lib/context';
 
 export default function Home() {
-  const {user, username, loading} = useContext(UserContext);
-
+  const {user, loading} = useContext(UserContext);
   useEffect(() => {
     console.log(loading);
     // Obtain emailLink from the user.
@@ -23,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-        { user && <h1>Willkommen</h1> }
+        { user && i18n.t('Welcome to React') }
         { !user && !loading && <Link href='/login'>Login</Link> }
     </>
 

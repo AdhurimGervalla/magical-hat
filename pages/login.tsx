@@ -4,6 +4,7 @@ import { sendSignInLinkToEmail, signInWithEmailAndPassword, signOut } from "fire
 import AuthCheck from "../components/AuthCheck";
 import toast, { Toaster } from 'react-hot-toast';
 import { UserContext } from "../lib/context";
+import i18n from "../i18n";
 
 export default function Login(): ReactElement {
     const {user, username, loading} = useContext(UserContext);
@@ -12,7 +13,7 @@ export default function Login(): ReactElement {
     function UserGreeting(): ReactElement {    
         return(
             <div>
-                {username && <p>Hi {username}</p>}
+                {username && <p>{i18n.t('Hello')} {username}</p>}
             </div>
         )
     }
@@ -37,33 +38,25 @@ export default function Login(): ReactElement {
             const email = event.target.email.value;
             const pw = event.target.password.value;
             const sendEmailLoginLink = loginWithEmailLink;
-
-            const obj = {
-                loading: {
-                    loading: 'Loading', success: () => `Successfully logged in`, 
-                    error: (err) => `${err.toString()}`
-                }, 
-                styling: {
-                    style: {minWidth: '250px'}, 
-                    success: {duration: 5000, icon: '🔥'}
-                }
-            };
             
             // register via E-Mail and password field
             if (!sendEmailLoginLink && email && pw) {
-                toast.promise(
-                    signInWithEmailAndPassword(auth, email, pw),
-                    obj.loading,
-                    obj.styling
-                );       
+                signInWithEmailAndPassword(auth, email, pw);      
             } 
 
             // send E-Mail Login Link to login
             if (sendEmailLoginLink && email) {
                 toast.promise(
                     sendSignInLinkToEmail(auth, email, actionCodeSettings),
-                    obj.loading,
-                    obj.styling
+                    {
+                        loading: 'Loading', 
+                        success: () => i18n.t('Link has been sent to your e-mail address'), 
+                        error: (err) => `${err.toString()}`
+                    },
+                    {
+                        style: {minWidth: '250px'}, 
+                        success: {duration: 5000, icon: '🔥'}
+                    }
                 )
             } 
         });
@@ -71,16 +64,16 @@ export default function Login(): ReactElement {
         return(
             <form onSubmit={handleSubmit}>
                 <input type="email" name="email" placeholder="E-Mail" required />
-                <input id="password" type={!loginWithEmailLink ? 'password' : 'hidden'} name="password" placeholder="Password" required={!loginWithEmailLink} />
-                <button type="submit">Login</button>
-                <label><input type="checkbox" name="emailLink" onChange={() => setLoginWithEmailLink(!loginWithEmailLink)} />Login with E-Mail Link</label>
+                <input id="password" type={!loginWithEmailLink ? 'password' : 'hidden'} name="password" placeholder={i18n.t('Password')} required={!loginWithEmailLink} />
+                <button type="submit">{i18n.t('Login')}</button>
+                <label><input type="checkbox" name="emailLink" onChange={() => setLoginWithEmailLink(!loginWithEmailLink)} />{i18n.t('Login with E-Mail link')}</label>
             </form>
         );
     }
 
     return(
         <main>
-            <h1>Login</h1>
+            <h1>{i18n.t('Login')}</h1>
             <Toaster/>
             {!user && !loading && <SignInWithEmailForm />}
             <AuthCheck fallback={true}>

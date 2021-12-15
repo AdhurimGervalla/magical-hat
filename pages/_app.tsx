@@ -1,7 +1,7 @@
 import { UserContext } from '../lib/context';
-import { useUserData } from '../lib/hooks'
-import '../styles/globals.css'
-
+import { useUserData } from '../lib/hooks';
+import '../styles/globals.css';
+import '../i18n';
 function MyApp({ Component, pageProps }) {
   
   const userData = useUserData();
