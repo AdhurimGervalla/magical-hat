@@ -1,7 +1,6 @@
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useContext, useEffect } from 'react';
 import { auth } from '../lib/firebase';
-import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { UserContext } from '../lib/context';
 import {useRouter} from "next/router";

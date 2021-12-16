@@ -1,7 +1,7 @@
-import { collection, query, doc, orderBy, where, collectionGroup, startAfter, limit, getDocs } from 'firebase/firestore';
+import { collection, query, doc, orderBy } from 'firebase/firestore';
 import { useCollection } from "react-firebase-hooks/firestore";
-import { auth, firestore, fromMillis, postToJSON } from "../../lib/firebase";
-import { useContext, useState } from "react";
+import { firestore} from "../../lib/firebase";
+import { useContext } from "react";
 import { UserContext } from '../../lib/context';
 import ComponentsFeed from '../../components/ComponentsFeed';
 
