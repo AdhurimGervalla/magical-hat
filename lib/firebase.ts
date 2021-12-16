@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth, User } from "firebase/auth";
-import { doc, getDoc, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
+import { doc, getDoc, Timestamp, getDocs, getFirestore, limit, query, where } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,9 +26,10 @@ export const actionCodeSettings = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-export const auth = getAuth(firebaseApp);
-export const firestore = getFirestore(firebaseApp);
+initializeApp(firebaseConfig);
+export const auth = getAuth();
+export const firestore = getFirestore();
+export const fromMillis = Timestamp.fromMillis;
 
 export const getUsernameWithUid = async (user: User) => {
   const docRef = doc(firestore, 'users', user.uid);
@@ -36,3 +37,20 @@ export const getUsernameWithUid = async (user: User) => {
   const data = docSnap.data();
   return {...data};
 }
+
+/**
+ *
+ * @param doc
+ * @return {*&{createdAt, updatedAt}}
+ */
+ export function postToJSON(doc) {
+  const data = doc.data();
+  return {
+    ...data,
+    // Gotcha! firestore timestamp NOT serializable to JSON. Must convert to milliseconds
+    createdAt: data.createdAt.toMillis(),
+    updatedAt: data.updatedAt.toMillis(),
+  }
+
+}
+

@@ -6,6 +6,7 @@ import { auth, firestore } from "./firebase";
 export function useUserData() {
     const [user, loading] = useAuthState(auth);
     const [username, setUsername] = useState(null);
+    const [groupId, setGroupiId] = useState(null);
 
     useEffect(() => {
         let unsubscribe;
@@ -13,6 +14,7 @@ export function useUserData() {
         if (user) {
             unsubscribe = onSnapshot(doc(firestore, 'users', user.uid), (doc) => {
                 setUsername(doc.data()?.username);
+                setGroupiId(doc.data()?.groupid);
             });
         } else {
             setUsername(null);
@@ -21,5 +23,5 @@ export function useUserData() {
         return unsubscribe;
     }, [user]);
 
-    return {user, username, loading};
+    return {user, username, loading, groupId};
 }

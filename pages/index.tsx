@@ -1,28 +1,35 @@
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { useContext, useEffect } from 'react';
-import i18n from '../i18n';
 import { auth } from '../lib/firebase';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { UserContext } from '../lib/context';
+import {useRouter} from "next/router";
 
 export default function Home() {
-  const {user, loading} = useContext(UserContext);
+  const {user, loading, groupId} = useContext(UserContext);
+  const router = useRouter();
+
   useEffect(() => {
-    console.log(loading);
     // Obtain emailLink from the user.
     if (isSignInWithEmailLink(auth, window.location.href)) {
         signInWithEmailLink(auth, window.localStorage.getItem('emailForSignIn'), window.location.href)
-        .then(() => toast.success('Welcome to the magical hat!'))
+        .then(() => router.push('/'))
         .catch((error) =>  console.error(error))
     }
   }, [])
 
   return (
     <>
-        { user && i18n.t('Welcome to React') }
-        { !user && !loading && <Link href='/login'>Login</Link> }
+      { groupId && 
+      <div>
+        <h1>Welcome to the magical hat. Draw a component.</h1>
+        <p><Link href="/components">Show Components</Link></p>
+      </div>
+      }
+      { !user && !loading && <Link href='/login'>Login</Link> }
     </>
 
   )
 }
+
